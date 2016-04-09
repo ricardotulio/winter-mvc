@@ -1,0 +1,20 @@
+{
+    "name": "winter/mvc",
+    "description": "Biblioteca responsável por prover meios para roteamento da aplicação a partir de anotações",
+    "type": "library",
+    "license": "GPL-3.0+",
+    "minimum-stability": "stable",
+    "require": {
+        "respect/rest": "^0.6.0",
+        "doctrine/annotations": "^1.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.3"
+    },
+    "autoload": {
+    	"psr-4": { 
+    		"Winter\\Mvc\\": [ "library/Winter/Mvc/", "tests/Winter/Mvc/" ],
+    		"MyApp\\": "app/"
+    	}
+    }
+}
