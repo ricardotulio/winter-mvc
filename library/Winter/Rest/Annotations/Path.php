@@ -1,5 +1,5 @@
 <?php
-namespace Winter\Mvc\Annotations;
+namespace Winter\Rest\Annotations;
 
 use Doctrine\Common\Annotations\Annotation;
 
@@ -7,11 +7,12 @@ use Doctrine\Common\Annotations\Annotation;
  * Classe responsável por identificar classes controladoras
  *
  * @Annotation
+ * @Target("CLASS")
  *
  * @author Ricardo
- * @package Winter\Mvc\Annotations
+ * @package Winter\Rest\Annotations
  * @version 0.1.0
  */
-class Controller extends Annotation
+class Path extends Annotation
 {
 }

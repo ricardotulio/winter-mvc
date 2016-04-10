@@ -20,17 +20,19 @@ if (defined('APPLICATION_ENVIRONMENT')) {
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Respect\Rest\Router;
-use Winter\Mvc\Annotations\FileReader;
+use Winter\Rest\Annotations\FileReader;
+use Winter\Rest\Cache\FileSystemCache;
 
 require_once ("vendor/autoload.php");
 
 $annotationReader = new AnnotationReader();
 $router = new Router();
+$cache = new FileSystemCache("/tmp/");
 $config = array(
-    "namespace" => "Winter",
-    "path" => "tests\\Winter",
-    "cacheDir" => "tmp"
+    "namespace" => "MyApp",
+    "path" => "app",
+    "debug" => true
 );
 
-$fileReader = new FileReader($annotationReader, $router, $config);
+$fileReader = new FileReader($annotationReader, $router, $cache, $config);
 $fileReader->read();

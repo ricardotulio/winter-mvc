@@ -1,5 +1,5 @@
 <?php
-namespace Winter\Mvc\Annotations;
+namespace Winter\Rest\Annotations;
 
 use Doctrine\Common\Annotations\Reader;
 
@@ -8,7 +8,7 @@ use Doctrine\Common\Annotations\Reader;
  * que possuam as anotações Winter\Mvc\Annotations\Controller e Winter\Mvc\Annotations\RequestMapping
  *
  * @author Ricardo
- * @package Winter\Mvc\Annotations
+ * @package Winter\Rest\Annotations
  * @version 0.1.0
  */
 interface Reader

@@ -1,10 +1,11 @@
 <?php
-namespace Winter\Mvc\Annotations;
+namespace Winter\Rest\Annotations;
 
 use ReflectionClass;
 use Exception;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Respect\Rest\Router;
+use Winter\Rest\Cache\Cache;
 
 /**
  * Classe responsável por prover métodos para varredura do sistema de arquivos
@@ -12,25 +13,11 @@ use Respect\Rest\Router;
  * Winter\Mvc\Annotations\RequestMapping
  *
  * @author Ricardo
- * @package Winter\Mvc\Annotations
+ * @package Winter\Rest\Annotations
  * @version 0.1.0
  */
 class FileReader implements Reader
 {
-
-    /**
-     * Nome do arquivo de cache
-     *
-     * @var string
-     */
-    const CACHE_FILE = "__cacherouter.php";
-    
-    /**
-     * Tempo de duração do cache de rotas em segundos  
-     * 
-     * @var int 
-     */
-    const CACHE_TIME = 5 * 60;
 
     /**
      * Leitor de docblocs/anotações
@@ -61,18 +48,18 @@ class FileReader implements Reader
     private $path;
 
     /**
-     * Diretório do arquivo de cache
+     * Cache de rotas
      *
      * @var string
      */
-    private $cacheDir;
-
+    private $cache;
+    
     /**
-     * Arquivo de cache da aplicação
-     *
-     * @var string
+     * Define se a execução está em modo debug ou não
+     * 
+     * @var boolean
      */
-    private $cacheFile;
+    private $debug;
 
     /**
      * Construtor padrão
@@ -82,7 +69,7 @@ class FileReader implements Reader
      * @param array $config            
      * @throws Exception
      */
-    public function __construct(AnnotationReader $annotationReader, Router $router, array $config)
+    public function __construct(AnnotationReader $annotationReader, Router $router, Cache $cache = null, array $config)
     {
         $this->annotationReader = $annotationReader;
         $this->router = $router;
@@ -90,13 +77,13 @@ class FileReader implements Reader
         if (! isset($config['namespace']) || ! isset($config['path']))
             throw new Exception("Configuração inválida");
         
-        if (isset($config['cacheDir'])) {
-            $this->cacheDir = $config['cacheDir'];
-            $this->cacheFile = $this->cacheDir . DIRECTORY_SEPARATOR . self::CACHE_FILE;
+        if ($cache !== null) {
+            $this->cache = $cache;
         }
         
         $this->namespace = $config['namespace'];
         $this->path = $config['path'];
+        $this->debug = isset($config['debug']) ? $config['debug'] : false;
     }
 
     /**
@@ -107,11 +94,18 @@ class FileReader implements Reader
      */
     public function read()
     {
-        $cache = $this->loadCache();
-
-        if(!$cache) {
+        if($this->cache != null && !$this->debug) {
+            if(!$this->cache->hasCache()) {
+                $this->cache->start();
+                $this->validatePath($this->path);
+                $this->readDirectory($this->namespace, $this->path);
+                $this->cache->end();
+            } else {
+                $this->cache->load($this->router);                
+            }
+        } else {
             $this->validatePath($this->path);
-            $this->readDirectory($this->namespace, $this->path);
+            $this->readDirectory($this->namespace, $this->path);            
         }
     }
 
@@ -148,7 +142,7 @@ class FileReader implements Reader
             if (is_dir($filePath)) {
                 $this->readDirectory("$namespace\\$file", $filePath);
             } else {
-                $filePath = $namespace . DIRECTORY_SEPARATOR . $file;
+                $filePath = $namespace . '\\' . $file;
                 $this->readFile($filePath);
             }
         }
@@ -168,7 +162,7 @@ class FileReader implements Reader
             if (class_exists($className)) {
                 $reflection = new ReflectionClass($className);
                 
-                if ($this->isController($reflection)) {
+                if ($this->isResource($reflection)) {
                     $this->route($reflection);
                 }
             }
@@ -183,9 +177,9 @@ class FileReader implements Reader
      * @version 0.1.0
      * @return boolean
      */
-    private function isController(ReflectionClass $obj)
+    private function isResource(ReflectionClass $obj)
     {
-        return ($this->annotationReader->getClassAnnotation($obj, "Controller") !== null);
+        return ($this->annotationReader->getClassAnnotation($obj, "\Winter\Rest\Annotations\Path") !== null);
     }
 
     /**
@@ -196,53 +190,13 @@ class FileReader implements Reader
      */
     private function route(ReflectionClass $obj)
     {
-        $requestMapping = $this->annotationReader->getClassAnnotation($obj, "\Winter\Mvc\Annotations\RequestMapping");
-        $routePath = $requestMapping !== null ? $requestMapping->value : '/' . strtolower(str_replace("\\", "/", $obj->getName()));
+        $path = $this->annotationReader->getClassAnnotation($obj, "\Winter\Rest\Annotations\Path");
+        $routePath = $path->value;
         $routeTarget = $obj->getName();
         $this->router->any($routePath, $routeTarget);
-    }
-
-    /**
-     * @return boolean
-     * @todo Verificar se o atributo $cacheFile é diferente de nulo, ou seja, foi passado as informações para cache
-     * depois disso, verificar se o arquivo de cache já existe. Caso exista, carregá-lo. Caso não exista, verificar se 
-     * o diretório passado é gravável, se não for, lançar exceção. Se for, criar arquivo de cache.
-     * 
-     * @todo Verificar há quanto tempo esse arquivo foi modificado e sobreescrever o cache caso seja necessário atualização
-     * 
-     * @todo Dentro do arquivo de cache criado 
-     */
-    private function loadCache()
-    {
-        $arquivoCache = <<<EOF
-       
-        namespace \Winter\Mvc\Annotations\Cache;
-            
-        class Cache()  {
-            
-            private \$router;
-            
-            public function __construct(\Respect\Rest\Router \$router) {
-                \$this->router = \$router;
-            }
-            
-            public function init() {
-                \$this->router->any("", "");
-                \$this->router->any("", "");
-                \$this->router->any("", "");
-                \$this->router->any("", "");
-                \$this->router->any("", "");
-                \$this->router->any("", "");
-                \$this->router->any("", "");
-                \$this->router->any("", "");
-                \$this->router->any("", "");
-                \$this->router->any("", "");
-            }
-            
+        
+        if ($this->cache !== null) {
+            $this->cache->addRoute('any', $routePath, $routeTarget);
         }
-EOF;
-
-        $cache = new \Winter\Mvc\Annotations\Cache\Cache($this->router);
-        $cache->load();
     }
 } 

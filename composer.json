@@ -13,7 +13,7 @@
     },
     "autoload": {
     	"psr-4": { 
-    		"Winter\\Mvc\\": [ "library/Winter/Mvc/", "tests/Winter/Mvc/" ],
+    		"Winter\\Rest\\": [ "library/Winter/Rest/", "tests/Winter/Rest/" ],
     		"MyApp\\": "app/"
     	}
     }
