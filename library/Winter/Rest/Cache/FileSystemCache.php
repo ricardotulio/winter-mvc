@@ -2,7 +2,7 @@
 namespace Winter\Rest\Cache;
 
 use Exception;
-use Respect\Rest\Router;
+use Winter\Rest\Router\Router;
 
 /**
  * Classe responsável por gerenciar o cache de rotas em arquivo

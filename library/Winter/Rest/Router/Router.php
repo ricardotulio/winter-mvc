@@ -1,0 +1,59 @@
+<?php
+namespace Winter\Rest\Router;
+
+/**
+ * Interface responsável por prover métodos para roteamento
+ * da aplicação
+ *
+ * @author Ricardo Ledo de Tulio
+ * @package Winter\Rest\Router 
+ * @version 0.1.0       
+ */
+interface Router
+{
+
+    /**
+     * Método responsável por criar uma rota para atender 
+     * requisições HTTP do tipo GET
+     * 
+     * @param string $path
+     * @param string|function $target
+     */
+    public function get($path, $target);
+
+    /**
+     * Método responsável por criar uma rota para requisições
+     * HTTP do tipo POST
+     *
+     * @param string $path
+     * @param string|function $target
+     */
+    public function post($path, $target);
+
+    /**
+     * Método responsável por criar uma rota para atender 
+     * requisições HTTP do tipo PUT
+     *
+     * @param string $path
+     * @param string|function $target
+     */
+    public function put($path, $target);
+
+    /**
+     * Método responsável por criar uma rota para atender
+     * requisições HTTP do tipo DELETE
+     *
+     * @param string $path
+     * @param string|function $target
+     */
+    public function delete($path, $target);
+
+    /**
+     * Método responsável por criar uma rota para atender 
+     * requisições HTTP GET, POST, PUT e DELETE
+     *
+     * @param string $path
+     * @param string|function $target
+     */
+    public function any($path, $target);
+}

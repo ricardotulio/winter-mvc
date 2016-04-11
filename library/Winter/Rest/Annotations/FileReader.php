@@ -4,8 +4,8 @@ namespace Winter\Rest\Annotations;
 use ReflectionClass;
 use Exception;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Respect\Rest\Router;
 use Winter\Rest\Cache\Cache;
+use Winter\Rest\Router\Router;
 
 /**
  * Classe responsável por prover métodos para varredura do sistema de arquivos
@@ -53,10 +53,10 @@ class FileReader implements Reader
      * @var string
      */
     private $cache;
-    
+
     /**
      * Define se a execução está em modo debug ou não
-     * 
+     *
      * @var boolean
      */
     private $debug;
@@ -94,18 +94,18 @@ class FileReader implements Reader
      */
     public function read()
     {
-        if($this->cache != null && !$this->debug) {
-            if(!$this->cache->hasCache()) {
+        if ($this->cache != null && ! $this->debug) {
+            if (! $this->cache->hasCache()) {
                 $this->cache->start();
                 $this->validatePath($this->path);
                 $this->readDirectory($this->namespace, $this->path);
                 $this->cache->end();
             } else {
-                $this->cache->load($this->router);                
+                $this->cache->load($this->router);
             }
         } else {
             $this->validatePath($this->path);
-            $this->readDirectory($this->namespace, $this->path);            
+            $this->readDirectory($this->namespace, $this->path);
         }
     }
 
