@@ -19,14 +19,14 @@ if (defined('APPLICATION_ENVIRONMENT')) {
 }
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Respect\Rest\Router;
+use Winter\Rest\Router\RespectRouterAdapter;
 use Winter\Rest\Annotations\FileReader;
 use Winter\Rest\Cache\FileSystemCache;
 
 require_once ("vendor/autoload.php");
 
 $annotationReader = new AnnotationReader();
-$router = new Router();
+$router = new RespectRouterAdapter();
 $cache = new FileSystemCache("/tmp/");
 $config = array(
     "namespace" => "MyApp",

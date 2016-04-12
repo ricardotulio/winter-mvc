@@ -84,7 +84,7 @@ class FileSystemCache implements Cache
             
 namespace $namespace;
     
-use Respect\Rest\Router;
+use Winter\Rest\Router\Router;
 
 class $class {
     

@@ -1,7 +1,7 @@
 <?php
 namespace Winter\Rest\Cache;
 
-use Respect\Rest\Router;
+use Winter\Rest\Router\Router;
 
 /**
  * Interface responsável por prover métodos para manipulação de cache
