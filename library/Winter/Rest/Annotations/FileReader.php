@@ -94,18 +94,22 @@ class FileReader implements Reader
      */
     public function read()
     {
-        if ($this->cache != null && ! $this->debug) {
-            if (! $this->cache->hasCache()) {
-                $this->cache->start();
+        try{
+            if ($this->cache != null && ! $this->debug) {
+                if (! $this->cache->hasCache()) {
+                    $this->cache->start();
+                    $this->validatePath($this->path);
+                    $this->readDirectory($this->namespace, $this->path);
+                    $this->cache->end();
+                } else {
+                    $this->cache->load($this->router);
+                }
+            } else {
                 $this->validatePath($this->path);
                 $this->readDirectory($this->namespace, $this->path);
-                $this->cache->end();
-            } else {
-                $this->cache->load($this->router);
-            }
-        } else {
-            $this->validatePath($this->path);
-            $this->readDirectory($this->namespace, $this->path);
+            }   
+        }catch(Exception $e){
+            echo $e->getMessage();
         }
     }
 

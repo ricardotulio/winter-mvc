@@ -29,8 +29,8 @@ $annotationReader = new AnnotationReader();
 $router = new RespectRouterAdapter();
 $cache = new FileSystemCache("/tmp/");
 $config = array(
-    "namespace" => "MyApp",
-    "path" => "app",
+    "namespace" => "Winter\Rest",
+    "path" => "library/",
     "debug" => true
 );
 
