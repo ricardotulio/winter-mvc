@@ -35,7 +35,10 @@ class SilexRouterAdapter implements Router {
      */
     public function post($path, $target)
     {
-        $this->router->post($path, $target);
+        $this->router->post($path, function() use ($target) {
+            $controller = new $target();
+            return $controller->post();
+        });
     }
     
     /**
@@ -47,7 +50,10 @@ class SilexRouterAdapter implements Router {
      */
     public function put($path, $target)
     {
-        $this->router->put($path, $target);
+        $this->router->put($path, function() use ($target) {
+            $controller = new $target();
+            return $controller->put();
+        });
     }
     
     /**
@@ -59,7 +65,10 @@ class SilexRouterAdapter implements Router {
      */
     public function delete($path, $target)
     {
-        $this->router->delete($path, $target);
+        $this->router->delete($path, function() use ($target) {
+            $controller = new $target();
+            return $controller->delete();
+        });
     }
     
     /**
@@ -71,7 +80,10 @@ class SilexRouterAdapter implements Router {
      */
     public function any($path, $target)
     {
+        $this->delete($path, $target);
         $this->get($path, $target);
+        $this->post($path, $target);
+        $this->put($path, $target);
     }
     
     public function run() {

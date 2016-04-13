@@ -66,7 +66,10 @@ class RespectRouterAdapter implements Router
      */
     public function delete($path, $target)
     {
-        $this->router->delete($path, $target);
+        $this->router->delete($path, function () use($target) {
+            $controller = new $target();
+            return $controller->delete();
+        });
     }
 
     /**
