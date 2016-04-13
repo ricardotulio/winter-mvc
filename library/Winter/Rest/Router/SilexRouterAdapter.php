@@ -1,6 +1,8 @@
 <?php
 namespace Winter\Rest\Router;
 
+// use Silex\Route\
+
 class SilexRouterAdapter implements Router
 {
 

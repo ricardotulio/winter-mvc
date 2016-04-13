@@ -20,7 +20,7 @@ class RespectRouterAdapter implements Router
      */
     public function get($path, $target)
     {
-        $this->router->get($path, $routeTarget);
+        $this->router->get($path, $target);
     }
 
     /**
@@ -32,7 +32,7 @@ class RespectRouterAdapter implements Router
      */
     public function post($path, $target)
     {
-        $this->router->post($path, $routeTarget);
+        $this->router->post($path, $target);
     }
 
     /**
@@ -44,7 +44,7 @@ class RespectRouterAdapter implements Router
      */
     public function put($path, $target)
     {
-        $this->router->put($path, $routeTarget);
+        $this->router->put($path, $target);
     }
 
     /**
@@ -56,7 +56,7 @@ class RespectRouterAdapter implements Router
      */
     public function delete($path, $target)
     {
-        $this->router->delete($path, $routeTarget);
+        $this->router->delete($path, $target);
     }
 
     /**
@@ -68,6 +68,6 @@ class RespectRouterAdapter implements Router
      */
     public function any($path, $target)
     {
-        $this->router->any($path, $routeTarget);
+        $this->router->any($path, $target);
     }
 }

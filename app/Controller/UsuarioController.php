@@ -12,6 +12,6 @@ class UsuarioController implements Routable
 
     public function get()
     {
-        return "Hello, world!";
+        return "APP Usuario";
     }
 }

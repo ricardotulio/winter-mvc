@@ -28,9 +28,14 @@ require_once ("vendor/autoload.php");
 $annotationReader = new AnnotationReader();
 $router = new RespectRouterAdapter();
 $cache = new FileSystemCache("/tmp/");
+
+/*
+ * No namerspace é definido o Namespace do diretório onde você deseja varrer
+ * No Path, você deve inserir o path que o namespace aponta  
+*/
 $config = array(
-    "namespace" => "Winter\Rest",
-    "path" => "library/",
+    "namespace" => "MyApp",
+    "path" => "app",
     "debug" => true
 );
 

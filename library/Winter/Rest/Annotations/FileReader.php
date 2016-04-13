@@ -94,7 +94,6 @@ class FileReader implements Reader
      */
     public function read()
     {
-        try{
             if ($this->cache != null && ! $this->debug) {
                 if (! $this->cache->hasCache()) {
                     $this->cache->start();
@@ -108,9 +107,6 @@ class FileReader implements Reader
                 $this->validatePath($this->path);
                 $this->readDirectory($this->namespace, $this->path);
             }   
-        }catch(Exception $e){
-            echo $e->getMessage();
-        }
     }
 
     /**
@@ -162,7 +158,6 @@ class FileReader implements Reader
     {
         if (preg_match('/.php$/', $filePath)) {
             $className = substr($filePath, 0, - 4);
-            
             if (class_exists($className)) {
                 $reflection = new ReflectionClass($className);
                 
@@ -183,7 +178,11 @@ class FileReader implements Reader
      */
     private function isResource(ReflectionClass $obj)
     {
-        return ($this->annotationReader->getClassAnnotation($obj, "\Winter\Rest\Annotations\Path") !== null);
+        if(!class_exists('\Winter\Rest\Annotations\Path')){
+            return false;            
+        }
+        
+        return ($this->annotationReader->getClassAnnotations($obj, "\Winter\Rest\Annotations\Path") !== null);
     }
 
     /**
@@ -195,6 +194,9 @@ class FileReader implements Reader
     private function route(ReflectionClass $obj)
     {
         $path = $this->annotationReader->getClassAnnotation($obj, "\Winter\Rest\Annotations\Path");
+        if($path === NULL){
+            throw new Exception("Route not found");
+        }
         $routePath = $path->value;
         $routeTarget = $obj->getName();
         $this->router->any($routePath, $routeTarget);
