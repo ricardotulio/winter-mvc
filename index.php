@@ -19,25 +19,40 @@ if (defined('APPLICATION_ENVIRONMENT')) {
 }
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Winter\Rest\Router\RespectRouterAdapter;
 use Winter\Rest\Annotations\FileReader;
 use Winter\Rest\Cache\FileSystemCache;
+use Winter\Rest\Router\RespectRouterAdapter;
 
 require_once ("vendor/autoload.php");
 
+
+/*  
+ * It's create an instance from AnottationReader
+*/
 $annotationReader = new AnnotationReader();
-$router = new RespectRouterAdapter();
-$cache = new FileSystemCache("/tmp/");
 
 /*
- * No namerspace é definido o Namespace do diretório onde você deseja varrer
- * No Path, você deve inserir o path que o namespace aponta  
+ * It's created an instance from Router Adapter that you created, or some existing. 
+ */
+$router = new RespectRouterAdapter();
+
+/*  
+ * It's created a instance of our Cache, and you set the folder that you want, by default we use tmp
+*/
+$cache = new FileSystemCache("tmp/");
+
+/*
+ * Here, in the "namespace" is defined the Namespace of directory where you wish sweep
+ * In the "Path", you should insert the path that is appointed by namespace
 */
 $config = array(
     "namespace" => "MyApp",
     "path" => "app",
-    "debug" => true
+    "debug" => false
 );
 
+/*  
+ * It's here where our application starts, we pass all instances created for it to make the magic
+*/
 $fileReader = new FileReader($annotationReader, $router, $cache, $config);
 $fileReader->read();

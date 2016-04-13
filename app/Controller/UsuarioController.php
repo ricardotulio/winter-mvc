@@ -1,17 +1,20 @@
 <?php
 namespace MyApp\Controller;
 
-use Respect\Rest\Routable;
 use Winter\Rest\Annotations\Path;
 
 /**
- * @Path("/usuario/v1")
+ * @Path("/usuario/v2")
  */
-class UsuarioController implements Routable
+class UsuarioController
 {
 
     public function get()
     {
         return "APP Usuario";
+    }
+    
+    public function post() {
+        return "vai caraio!";
     }
 }

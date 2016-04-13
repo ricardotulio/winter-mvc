@@ -10,6 +10,7 @@ use Winter\Rest\Router\Router;
  * @author Ricardo Ledo de Tulio <ricardo.tulio@fatec.sp.gov.br>
  * @version 0.1.0
  * @package Winter\Rest\Cache
+ * @todo Criar meios para definição de atualização de cache
  */
 interface Cache
 {

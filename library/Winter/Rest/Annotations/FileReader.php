@@ -94,19 +94,21 @@ class FileReader implements Reader
      */
     public function read()
     {
-            if ($this->cache != null && ! $this->debug) {
-                if (! $this->cache->hasCache()) {
-                    $this->cache->start();
-                    $this->validatePath($this->path);
-                    $this->readDirectory($this->namespace, $this->path);
-                    $this->cache->end();
-                } else {
-                    $this->cache->load($this->router);
-                }
-            } else {
+        if ($this->cache != null && ! $this->debug) {
+            if (! $this->cache->hasCache()) {
+                $this->cache->start();
                 $this->validatePath($this->path);
                 $this->readDirectory($this->namespace, $this->path);
-            }   
+                $this->cache->end();
+            } else {
+                $this->cache->load($this->router);
+            }
+        } else {
+            $this->validatePath($this->path);
+            $this->readDirectory($this->namespace, $this->path);
+        }
+        
+        $this->router->run();
     }
 
     /**
@@ -178,8 +180,8 @@ class FileReader implements Reader
      */
     private function isResource(ReflectionClass $obj)
     {
-        if(!class_exists('\Winter\Rest\Annotations\Path')){
-            return false;            
+        if (! class_exists('\Winter\Rest\Annotations\Path')) {
+            return false;
         }
         
         return ($this->annotationReader->getClassAnnotations($obj, "\Winter\Rest\Annotations\Path") !== null);
@@ -194,7 +196,7 @@ class FileReader implements Reader
     private function route(ReflectionClass $obj)
     {
         $path = $this->annotationReader->getClassAnnotation($obj, "\Winter\Rest\Annotations\Path");
-        if($path === NULL){
+        if ($path === NULL) {
             throw new Exception("Route not found");
         }
         $routePath = $path->value;

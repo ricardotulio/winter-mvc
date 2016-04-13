@@ -56,4 +56,12 @@ interface Router
      * @param string|function $target
      */
     public function any($path, $target);
+
+    /**
+     * Método responsável por executar o roteamento da aplicação
+     *
+     * @param string $path
+     * @param string|function $target
+     */
+    public function run();
 }

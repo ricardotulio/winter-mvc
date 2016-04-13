@@ -9,6 +9,7 @@ class RespectRouterAdapter implements Router
     public function __construct()
     {
         $this->router = new \Respect\Rest\Router();
+        $this->router->isAutoDispatched = false;
     }
 
     /**
@@ -20,7 +21,10 @@ class RespectRouterAdapter implements Router
      */
     public function get($path, $target)
     {
-        $this->router->get($path, $target);
+        $this->router->get($path, function () use($target) {
+            $controller = new $target();
+            return $controller->get();
+        });
     }
 
     /**
@@ -32,7 +36,10 @@ class RespectRouterAdapter implements Router
      */
     public function post($path, $target)
     {
-        $this->router->post($path, $target);
+        $this->router->post($path, function () use($target) {
+            $controller = new $target();
+            return $controller->post();
+        });
     }
 
     /**
@@ -44,7 +51,10 @@ class RespectRouterAdapter implements Router
      */
     public function put($path, $target)
     {
-        $this->router->put($path, $target);
+        $this->router->put($path, function () use($target) {
+            $controller = new $target();
+            return $controller->put();
+        });
     }
 
     /**
@@ -68,6 +78,20 @@ class RespectRouterAdapter implements Router
      */
     public function any($path, $target)
     {
-        $this->router->any($path, $target);
+        $this->get($path, $target);
+        $this->post($path, $target);
+        $this->put($path, $target);
+        $this->delete($path, $target);
+    }
+
+    /**
+     * Método responsável por executar o roteamento da aplicação
+     *
+     * @param string $path            
+     * @param string|function $target            
+     */
+    public function run()
+    {
+        echo $this->router->run();
     }
 }

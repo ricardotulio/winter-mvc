@@ -7,6 +7,7 @@
     "require": {
         "respect/rest": "^0.6.0",
         "doctrine/annotations": "^1.2",
+        "aura/router": "^3.0",
         "silex/silex": "^1.3"
     },
     "require-dev": {
