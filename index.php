@@ -1,6 +1,6 @@
 <?php
 define('APPLICATION_PATH', realpath(dirname(__FILE__)));
-define('APPLICATION_ENVIRONMENT', 'development');
+define('APPLICATION_ENVIRONMENT', 'production');
 
 if (defined('APPLICATION_ENVIRONMENT')) {
     switch (APPLICATION_ENVIRONMENT) {
