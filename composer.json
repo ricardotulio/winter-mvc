@@ -11,7 +11,7 @@
         "silex/silex": "^1.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8"
+        "phpunit/phpunit": "dev-master"
     },
     "autoload": {
     	"psr-4": { 

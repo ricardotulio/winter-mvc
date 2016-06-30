@@ -4,7 +4,7 @@ namespace MyApp\Controller;
 use Winter\Rest\Annotations\Path;
 
 /**
- * @Path("/usuario/v2")
+ * @Path("/usuario/v1")
  */
 class UsuarioController
 {

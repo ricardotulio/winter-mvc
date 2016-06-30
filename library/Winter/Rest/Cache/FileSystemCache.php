@@ -5,7 +5,7 @@ use Exception;
 use Winter\Rest\Router\Router;
 
 /**
- * Classe responsável por gerenciar o cache de rotas em arquivo
+ * Classe responsï¿½vel por gerenciar o cache de rotas em arquivo
  *
  * @author Ricardo Ledo de Tulio <ledo.tulio@gmail.com>
  * @package Winter\Rest\Cache
@@ -36,14 +36,14 @@ class FileSystemCache implements Cache
     private $cachePath;
     
     /**
-     * Conteúdo do arquivo que contém a classe de cache
+     * Conteï¿½do do arquivo que contï¿½m a classe de cache
      * 
      * @var string
      */
     private $fileContents = '';
 
     /**
-     * Construtor padrão
+     * Construtor padrï¿½o
      *
      * @author Ricardo Ledo de Tulio <ledo.tulio@gmail.com>
      * @param string $cacheDir            
@@ -52,7 +52,7 @@ class FileSystemCache implements Cache
     public function __construct($cacheDir)
     {
         if (! file_exists($cacheDir) || ! is_writable($cacheDir))
-            throw new Exception("Diretório de cache inválido!");
+            throw new Exception("DiretÃ³rio de cache invÃ¡lido!");
         
         $this->cachePath = $cacheDir . DIRECTORY_SEPARATOR . self::CACHE_CLASS . '.php';
     }
